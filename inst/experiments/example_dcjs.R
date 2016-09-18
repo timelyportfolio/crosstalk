@@ -74,16 +74,10 @@ browsable(
     var force_nodes = force_svg.selectAll('.node');
     var force_links = force_svg.selectAll('.link');
 
-    var sources = d3.zip.apply([],ct_filter._filterSet.value)[0];
-    var targets = d3.zip.apply([],ct_filter._filterSet.value)[1];
-
-    sources = sources ? sources : [];
-    targets = targets ? targets : [];
-
     var matched = function(link){
       var found = false;
-      for(i=0; i< sources.length; i++){
-        if(sources[i] == link.source.name && targets[i] == link.target.name){
+      for(i=0; i< filters.length; i++){
+        if(filters[i][0] == link.source.name && filters[i][1] == link.target.name){
           found = true;
           break;
         }
