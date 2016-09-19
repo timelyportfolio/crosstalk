@@ -18,6 +18,24 @@ fn <- forceNetwork(
   height = 400, width = 400
 )
 
+fn <- htmlwidgets::onRender(
+  fn,
+"
+function(el,x) {
+  // as a quick example of bidirectional communication
+  //   filter force node if clicked and is source
+  //   in dc heat chart
+  d3.select(el).selectAll('.node').on('click.ct',function(d,i){
+    heatChart.data().map(function(dd,ii){
+      if(dd.key[0]==d.name){
+        heatChart.filter(dd.key);
+      }
+    });
+  });
+}
+"
+)
+
 browsable(
   attachDependencies(
     tagList(
@@ -97,7 +115,9 @@ browsable(
   // when crosstalk filter changes highlight
   ct_filter.on('change',function(val){
     highlightForce(val.value);
+    heatChart.redrawGroup();
   })
+
 ",
             jsonlite::toJSON(
               get.data.frame(karate),
