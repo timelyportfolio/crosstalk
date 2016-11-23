@@ -10,8 +10,8 @@ sd <- SharedData$new(mtcars_tbl, key=~rowname, group="grp1")
 
 mobx <- htmlDependency(
   name="mobx",
-  version="2.5.1",
-  src=c(href="https://cdnjs.cloudflare.com/ajax/libs/mobx/2.5.1/"),
+  version="2.6.3",
+  src=c(href="https://cdnjs.cloudflare.com/ajax/libs/mobx/2.6.3/"),
   script="mobx.umd.js"
 )
 
@@ -29,7 +29,7 @@ browsable(
 var ct_filter = new crosstalk.FilterHandle('grp1');
 
 var xv = mobx.extendObservable(
-  crosstalk.group('grp1')._vars.filter,{_value:this._value}
+  crosstalk.group('grp1').var('filter'),{_value:this._value}
 );
 
 mobx.autorun(function(){
@@ -45,18 +45,21 @@ mobx.autorun(function(){
 )
 
 browsable(
-  tagList(
-    crosstalk::filter_select(
-      "select-car",
-      "Car",
-      sd,
-      "rowname"
+  attachDependencies(
+    tagList(
+      crosstalk::filter_select(
+        "select-car",
+        "Car",
+        sd,
+        "rowname"
+      ),
+      crosstalk::filter_select(
+        "select-cyl",
+        "Cyl",
+        sd,
+        "cyl"
+      )
     ),
-    crosstalk::filter_select(
-      "select-cyl",
-      "Cyl",
-      sd,
-      "cyl"
-    )
+    mobx
   )
 )
