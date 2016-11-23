@@ -26,16 +26,15 @@ browsable(
       ),
       tags$script(
 "
-var g = crosstalk.group('grp1');
-if(!g.has('filter')){
-  g.var('filter');
-}
+var ct_filter = new crosstalk.FilterHandle('grp1');
+
 var xv = mobx.extendObservable(
-  g._vars.filter,{_value:this._value}
+  crosstalk.group('grp1')._vars.filter,{_value:this._value}
 );
+
 mobx.autorun(function(){
   console.log(
-    typeof(xv._value)==='undefined'?null:xv._value.toJS()
+    typeof(xv._value)==='undefined' || xv._value===null ? null : xv._value.toJS()
   )
 });
 "
